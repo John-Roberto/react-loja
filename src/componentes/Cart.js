@@ -1,45 +1,4 @@
-import styled from "styled-components";
 import Button from "./Button";
-
-
-/* Elemento de item da lista personalizado com CSS */
-const SLi = styled.li`
-    margin-bottom: 10px;
-    padding: 16px;
-    border-radius: 9px;
-    background: #f2f2f2;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-`;
-
-/* Elemento de bloco informativo personalizado com CSS */
-const SDivInfo = styled.div`
-    p {
-        font-size: 16px;
-        margin-bottom: 2px;
-    }
-
-    span {
-        font-size: 16px;
-        font-weight: bold;
-    }
-`;
-
-/* Elemento de bloco informativo personalizado com CSS */
-const SDivUnits = styled.div`
-    width: 86px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    button {
-        padding: 5px 10px;
-        border: 1px solid #ffffff;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-`;
 
 /**
  * Componente para listagem de produto no carrinho
@@ -47,37 +6,36 @@ const SDivUnits = styled.div`
  */
 function CartProduct({ product, onChange, isLoading }) {
     return (
-        <SLi>
-            <SDivInfo>
-                <p>{product.name}</p>
-                <span>R${product.price}</span>
-            </SDivInfo>
-            <SDivUnits>
-                <button disabled={isLoading} onClick={() => onChange(product, -1)}>
+        <li className="list-group-item d-flex justify-content-between align-items-center bg-light border-0 mb-2 rounded-3 p-3 shadow-sm">
+            <div className="me-3">
+                <p className="mb-0 text-muted small">{product.name}</p>
+                <span className="fw-bold text-dark">R${product.price}</span>
+            </div>
+            
+            <div className="btn-group btn-group-sm" role="group">
+                <button 
+                    type="button" 
+                    className="btn btn-outline-secondary" 
+                    disabled={isLoading} 
+                    onClick={() => onChange(product, -1)}
+                >
                     -
                 </button>
-                <p>{product.units}</p>
-                <button disabled={isLoading} onClick={() => onChange(product, +1)}>
+                <button type="button" className="btn btn-outline-secondary" disabled>
+                    {product.units}
+                </button>
+                <button 
+                    type="button" 
+                    className="btn btn-outline-secondary" 
+                    disabled={isLoading} 
+                    onClick={() => onChange(product, +1)}
+                >
                     +
                 </button>
-            </SDivUnits>
-        </SLi>
+            </div>
+        </li>
     );
 }
-
-/* Elemento de secao personalizado com CSS */
-const SSection = styled.section`
-    padding: 20px;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 50px;
-    gap: 20px;
-`;
-
-/* Elemento de lista personalizado com CSS */
-const SUl = styled.ul`
-    list-style-type: none;
-`;
 
 /**
  * Componente para listagem de produtos no carrinho
@@ -85,10 +43,13 @@ const SUl = styled.ul`
  * @param {Function} onClick Funcao de finalizacao
  * @param {Boolean} isLoading Status de loading
  */
-function Cart({ products, onChange, onClick, isLoading = false}) {
+function Cart({ products, onChange, onClick, isLoading = false }) {
     return (
-        <SSection>
-            <SUl>
+        <section className="d-flex flex-column h-100 p-3">
+            <h4 className="mb-4">Carrinho</h4>
+            <ul className="list-group list-group-flush mb-auto overflow-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+                {products.length === 0 && <li className="list-group-item text-center text-muted">Carrinho vazio</li>}
+                
                 {products.map((product) => (
                     <CartProduct
                         key={product.id}
@@ -97,11 +58,13 @@ function Cart({ products, onChange, onClick, isLoading = false}) {
                         isLoading={isLoading}
                     />
                 ))}
-            </SUl>
-            <Button onClick={onClick} isLoading={isLoading}>
-                Finalizar Compra
-            </Button>
-        </SSection>
+            </ul>
+            <div className="mt-3">
+                <Button onClick={onClick} isLoading={isLoading}>
+                    Finalizar Compra
+                </Button>
+            </div>
+        </section>
     );
 }
 

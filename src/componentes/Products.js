@@ -1,34 +1,3 @@
-import styled from "styled-components";
-
-/* Elemento de bloco personalizado com CSS */
-const SDiv = styled.div`
-    height: 260px;
-    padding: 10px;
-    border-radius: 10px;
-    background: #f2f2f2;
-    cursor: pointer;
-
-    img {
-        width: 100%;
-        height: 140px;
-        border-radius: 5px;
-    }
-`;
-
-/* Elemento do bloco de informacao personalizado com CSS */
-const SDivInfo = styled.div`
-    padding: 15px;
-
-    p {
-        font-size: 15px;
-    }
-
-    span {
-        font-size: 20px;
-        font-weight: bold;
-    }
-`;
-
 /**
  * Componente para listagem de produto
  * @param {Object} product Produto para listagem
@@ -36,43 +5,53 @@ const SDivInfo = styled.div`
  */
 function Product({ product, onClick }) {
     return (
-        <SDiv onClick={() => onClick(product)}>
-            <img src={product.image} alt={product.name} />
-            <SDivInfo>
-                <p>{product.name}</p>
-                <span>R${product.price}</span>
-            </SDivInfo>
-        </SDiv>
+        <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div 
+                className="card h-100 shadow-sm border-0 bg-light" 
+                style={{ cursor: 'pointer' }} 
+                onClick={() => onClick(product)}
+            >
+                <img 
+                    src={product.image} 
+                    className="card-img-top p-2" 
+                    alt={product.name} 
+                    style={{ height: '160px', objectFit: 'cover', borderRadius: '15px' }} 
+                />
+                <div className="card-body d-flex flex-column justify-content-between">
+                    <p className="card-text mb-2 text-secondary">{product.name}</p>
+                    <h5 className="card-title fw-bold">R${product.price}</h5>
+                </div>
+            </div>
+        </div>
     );
 }
-
-/* Elemento de secao personalizado com CSS */
-const SSection = styled.section`
-    overflow: auto;
-    padding: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-auto-rows: 230px;
-    gap: 2opx;
-`;
 
 /**
  * Componente para listagem de produtos
  * @param {Object[]} products Produtos para listagem
  * @param {Function} onClick Funcao de selecao
  */
-function Products({ products, onClick, isLoading = false}) {
+function Products({ products, onClick, isLoading = false }) {
     return (
-        <SSection>
-            {isLoading // Verifica se esta em loading
-                ? "Carregando..."
-                : products.lenght > 0 // Verifica se existem produtos
-                ? products.map((product) => (
-                    <Product key={product.id} product={product} onClick={onClick} />
-                ))
-                : "Nenhum produto encontrado!"
-            }
-        </SSection>
+        <section className="container-fluid p-4">
+            <div className="row">
+                {isLoading ? (
+                    <div className="col-12 text-center mt-5">
+                        <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Carregando...</span>
+                        </div>
+                    </div>
+                ) : products.length > 0 ? (
+                    products.map((product) => (
+                        <Product key={product.id} product={product} onClick={onClick} />
+                    ))
+                ) : (
+                    <div className="col-12 text-center">
+                        <p className="alert alert-warning">Nenhum produto encontrado!</p>
+                    </div>
+                )}
+            </div>
+        </section>
     );
 }
 
